@@ -1,11 +1,8 @@
 [package]
-name = "parachain-template-runtime"
+name = "selendra-runtime"
 version = "0.1.0"
-authors = ["Anonymous"]
-description = "A new Cumulus FRAME-based Substrate Runtime, ready for hacking together a parachain."
-license = "Unlicense"
-homepage = "https://substrate.io"
-repository = 'https://github.com/substrate-developer-hub/substrate-parachain-template'
+authors = ["Selendra <info@selendra.org>"]
+description = "Selendra parachain runtime."
 edition = "2018"
 
 [package.metadata.docs.rs]
@@ -20,9 +17,6 @@ log = { version = "0.4.14", default-features = false }
 scale-info = { version = "1.0.0", default-features = false, features = ["derive"] }
 serde = { version = "1.0.119", optional = true, features = ["derive"] }
 smallvec = "1.6.1"
-
-# Local Dependencies
-pallet-template = { path = "../pallets/template", default-features = false }
 
 # Substrate Dependencies
 ## Substrate Primitive Dependencies
@@ -107,7 +101,6 @@ std = [
 	"pallet-collator-selection/std",
 	"pallet-session/std",
 	"pallet-sudo/std",
-	"pallet-template/std",
 	"pallet-timestamp/std",
 	"pallet-transaction-payment-rpc-runtime-api/std",
 	"pallet-transaction-payment/std",
@@ -136,7 +129,6 @@ runtime-benchmarks = [
 	"frame-system/runtime-benchmarks",
 	"pallet-balances/runtime-benchmarks",
 	"pallet-collator-selection/runtime-benchmarks",
-	"pallet-template/runtime-benchmarks",
 	"pallet-timestamp/runtime-benchmarks",
 	"pallet-xcm/runtime-benchmarks",
 ]
