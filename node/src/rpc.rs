@@ -5,9 +5,8 @@
 
 #![warn(missing_docs)]
 
+use selendra_primitives::{AccountId, Balance, Block, Index as Nonce};
 use std::sync::Arc;
-
-use selendra_runtime::{opaque::Block, AccountId, Balance, Index as Nonce};
 
 use sc_client_api::AuxStore;
 pub use sc_rpc::{DenyUnsafe, SubscriptionTaskExecutor};

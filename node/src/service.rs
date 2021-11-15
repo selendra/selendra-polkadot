@@ -4,9 +4,8 @@
 use std::sync::Arc;
 
 // Local Runtime Types
-use selendra_runtime::{
-	opaque::Block, AccountId, Balance, Hash, Index as Nonce, RuntimeApi,
-};
+use selendra_primitives::{AccountId, Balance, Block, Hash, Index as Nonce};
+use selendra_runtime::RuntimeApi;
 
 // Cumulus Imports
 use cumulus_client_consensus_aura::{

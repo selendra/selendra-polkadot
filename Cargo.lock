@@ -5177,6 +5177,7 @@ dependencies = [
  "sc-tracing",
  "sc-transaction-pool",
  "sc-transaction-pool-api",
+ "selendra-primitives",
  "selendra-runtime",
  "serde",
  "sp-api",
@@ -8435,6 +8436,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "selendra-primitives"
+version = "0.1.0"
+dependencies = [
+ "frame-support",
+ "frame-system",
+ "parity-scale-codec",
+ "sp-application-crypto",
+ "sp-core",
+ "sp-runtime",
+]
+
+[[package]]
 name = "selendra-runtime"
 version = "0.1.0"
 dependencies = [
@@ -8468,6 +8481,7 @@ dependencies = [
  "polkadot-parachain",
  "polkadot-runtime-common",
  "scale-info",
+ "selendra-primitives",
  "serde",
  "smallvec",
  "sp-api",
