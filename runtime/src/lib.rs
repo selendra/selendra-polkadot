@@ -89,7 +89,7 @@ impl frame_system::Config for Runtime {
 	type Call = Call;
 	type Lookup = AccountIdLookup<AccountId, ()>;
 	type Index = Index;
-	type BlockNumber = BlockNumber;.
+	type BlockNumber = BlockNumber;
 	type Hash = Hash;
 	type Hashing = BlakeTwo256;
 	type Header = generic::Header<BlockNumber, BlakeTwo256>;

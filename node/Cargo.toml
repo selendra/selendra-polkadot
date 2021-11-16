@@ -1,11 +1,8 @@
 [package]
-name = "parachain-template-node"
+name = "selendra-node"
 version = "0.1.0"
-authors = ["Anonymous"]
-description = "A new Cumulus FRAME-based Substrate Node, ready for hacking together a parachain."
-license = "Unlicense"
-homepage = "https://substrate.io"
-repository = 'https://github.com/substrate-developer-hub/substrate-parachain-template'
+authors = ["Selendra <info@selendra.org>"]
+description = "A new Cumulus FRAME-based Substrate Node."
 edition = "2018"
 build = "build.rs"
 
@@ -16,7 +13,7 @@ targets = ["x86_64-unknown-linux-gnu"]
 substrate-build-script-utils = { git = "https://github.com/paritytech/substrate", branch = "polkadot-v0.9.12" }
 
 [[bin]]
-name = "parachain-collator"
+name = "selendra-parachain"
 path = "src/main.rs"
 
 [features]
