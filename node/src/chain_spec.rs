@@ -1,7 +1,7 @@
 use cumulus_primitives_core::ParaId;
 use sc_chain_spec::{ChainSpecExtension, ChainSpecGroup};
 use sc_service::ChainType;
-use selendra_runtime::{AccountId, AuraId, Signature, EXISTENTIAL_DEPOSIT};
+use selendra_runtime::{constants::common::EXISTENTIAL_DEPOSIT, AccountId, AuraId, Signature};
 use serde::{Deserialize, Serialize};
 use sp_core::{sr25519, Pair, Public};
 use sp_runtime::traits::{IdentifyAccount, Verify};
