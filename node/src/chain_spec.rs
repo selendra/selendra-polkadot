@@ -1,4 +1,5 @@
 use cumulus_primitives_core::ParaId;
+use hex_literal::hex;
 use sc_chain_spec::{ChainSpecExtension, ChainSpecGroup};
 use sc_service::ChainType;
 use selendra_runtime::{
@@ -6,7 +7,7 @@ use selendra_runtime::{
 	AccountId, AuraId, Signature,
 };
 use serde::{Deserialize, Serialize};
-use sp_core::{sr25519, Pair, Public};
+use sp_core::{crypto::UncheckedInto, sr25519, Pair, Public};
 use sp_runtime::traits::{IdentifyAccount, Verify};
 
 /// Specialized `ChainSpec` for the normal parachain runtime.
@@ -74,7 +75,7 @@ pub fn development_config() -> ChainSpec {
 		"dev",
 		ChainType::Development,
 		move || {
-			testnet_genesis(
+			selendra_genesis(
 				// initial collators.
 				vec![
 					(
@@ -96,12 +97,16 @@ pub fn development_config() -> ChainSpec {
 			)
 		},
 		Vec::new(),
+		// Telemetry
 		None,
-		None,
-		None,
+		// Protocol ID
+		Some("development"),
+		// Properties
+		Some(properties),
+		// Extensions
 		Extensions {
 			relay_chain: "rococo-local".into(), // You MUST set this to the correct network!
-			para_id: 1000,
+			para_id: 2000,
 		},
 	)
 }
@@ -120,7 +125,7 @@ pub fn local_testnet_config() -> ChainSpec {
 		"local_testnet",
 		ChainType::Local,
 		move || {
-			testnet_genesis(
+			selendra_genesis(
 				// initial collators.
 				vec![
 					(
@@ -138,7 +143,7 @@ pub fn local_testnet_config() -> ChainSpec {
 					get_account_id_from_seed::<sr25519::Public>("Alice//stash"),
 					get_account_id_from_seed::<sr25519::Public>("Bob//stash"),
 				],
-				1000.into(),
+				2000.into(),
 			)
 		},
 		// Bootnodes
@@ -146,18 +151,79 @@ pub fn local_testnet_config() -> ChainSpec {
 		// Telemetry
 		None,
 		// Protocol ID
-		Some("template-local"),
+		Some("local-testnet"),
 		// Properties
 		Some(properties),
 		// Extensions
 		Extensions {
-			relay_chain: "rococo-local".into(), // You MUST set this to the correct network!
+			relay_chain: "westend-local".into(), // You MUST set this to the correct network!
 			para_id: 1000,
 		},
 	)
 }
 
-fn testnet_genesis(
+pub fn selendra_config() -> ChainSpec {
+	// Give your base currency a unit name and decimal places
+	let mut properties = sc_chain_spec::Properties::new();
+	properties.insert("tokenSymbol".into(), "PSEL".into());
+	properties.insert("tokenDecimals".into(), 18.into());
+	properties.insert("ss58Format".into(), 42.into());
+
+	ChainSpec::from_genesis(
+		// Name
+		"Local Testnet",
+		// ID
+		"local_testnet",
+		ChainType::Local,
+		move || {
+			selendra_genesis(
+				// initial collators.
+				vec![
+					(
+						// 5EZN96zxrpq7woimDxeTpHGRjPzM2CqRngjq8QUw2LNEELJz
+						hex!("6e5436279b4f0c0c707f4fb5d7156b8dd81392c35718d1d54dc1eda24b76f73d")
+							.into(),
+						hex!("6e5436279b4f0c0c707f4fb5d7156b8dd81392c35718d1d54dc1eda24b76f73d")
+							.unchecked_into(),
+					),
+					(
+						// 5G41FZcv43L1YPJXK9u7o31yrceB3zimMc6TF2Y5bZJ4XV3E
+						hex!("b0683e8a2a5009b1e6f845ae1b95d6512a6a57e07aa5f9b91c8286c2a3988f4e")
+							.into(),
+						hex!("b0683e8a2a5009b1e6f845ae1b95d6512a6a57e07aa5f9b91c8286c2a3988f4e")
+							.unchecked_into(),
+					),
+				],
+				vec![
+					// 5EZN96zxrpq7woimDxeTpHGRjPzM2CqRngjq8QUw2LNEELJz
+					hex!["6e5436279b4f0c0c707f4fb5d7156b8dd81392c35718d1d54dc1eda24b76f73d"].into(),
+					// 5G41FZcv43L1YPJXK9u7o31yrceB3zimMc6TF2Y5bZJ4XV3E
+					hex!["b0683e8a2a5009b1e6f845ae1b95d6512a6a57e07aa5f9b91c8286c2a3988f4e"].into(),
+					// 5EhroJdJCDyNgVJ6JbEPCEkEsPRtAAsdEgDAS46Y8iAMEgQn
+					hex!["74cea5f84fb9423bf664f555f7c4d6f58f1a62e8d6f20936a4a5eb8f81ee1114"].into(),
+					// 5Eo5UWonGx75gTnEFRi6A3So5qfHGP4dL1ZFcHAc6fonYKKd
+					hex!["78c98bf320b2b8105af1fbca9558f506a291367f378da3e9e1dfcc7ab9bbc951"].into(),
+				],
+				2000.into(),
+			)
+		},
+		// Bootnodes
+		Vec::new(),
+		// Telemetry
+		None,
+		// Protocol ID
+		Some("local-testnet"),
+		// Properties
+		Some(properties),
+		// Extensions
+		Extensions {
+			relay_chain: "westend-local".into(), // You MUST set this to the correct network!
+			para_id: 2000,
+		},
+	)
+}
+
+fn selendra_genesis(
 	invulnerables: Vec<(AccountId, AuraId)>,
 	endowed_accounts: Vec<AccountId>,
 	id: ParaId,
