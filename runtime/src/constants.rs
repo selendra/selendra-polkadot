@@ -7,6 +7,10 @@ pub mod currency {
 	pub const UNIT: Balance = 1_000_000_000_000_000_000;
 	pub const MILLIUNIT: Balance = UNIT / 1000;
 	pub const MICROUNIT: Balance = MILLIUNIT / 1000;
+
+	pub const fn deposit(items: u32, bytes: u32) -> Balance {
+		(items as Balance * 2_000 * MILLIUNIT + (bytes as Balance) * 100 * MICROUNIT) / 10
+	}
 }
 
 /// Time.

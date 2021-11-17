@@ -8455,6 +8455,7 @@ dependencies = [
  "pallet-authorship",
  "pallet-balances",
  "pallet-collator-selection",
+ "pallet-multisig",
  "pallet-session",
  "pallet-sudo",
  "pallet-timestamp",
