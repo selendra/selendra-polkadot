@@ -182,6 +182,30 @@ impl pallet_multisig::Config for Runtime {
 	type WeightInfo = ();
 }
 
+parameter_types! {
+    pub const BasicDeposit: Balance = 10 * UNIT;       // 258 bytes on-chain
+    pub const FieldDeposit: Balance = 50 * MILLIUNIT;  // 66 bytes on-chain
+    pub const SubAccountDeposit: Balance = 5 * UNIT;   // 53 bytes on-chain
+    pub const MaxSubAccounts: u32 = 100;
+    pub const MaxAdditionalFields: u32 = 100;
+    pub const MaxRegistrars: u32 = 10;
+}
+
+impl pallet_identity::Config for Runtime {
+    type Event = Event;
+    type Currency = Balances;
+    type BasicDeposit = BasicDeposit;
+    type FieldDeposit = FieldDeposit;
+    type SubAccountDeposit = SubAccountDeposit;
+    type MaxSubAccounts = MaxSubAccounts;
+    type MaxAdditionalFields = MaxAdditionalFields;
+    type MaxRegistrars = MaxRegistrars;
+    type Slashed = ();
+    type ForceOrigin = frame_system::EnsureRoot<<Self as frame_system::Config>::AccountId>;
+    type RegistrarOrigin = frame_system::EnsureRoot<<Self as frame_system::Config>::AccountId>;
+    type WeightInfo = ();
+}
+
 impl pallet_utility::Config for Runtime {
 	type Event = Event;
 	type Call = Call;
@@ -445,6 +469,7 @@ construct_runtime!(
 		// Handy utilities.
 		Utility: pallet_utility::{Pallet, Call, Event} = 40,
 		Multisig: pallet_multisig::{Pallet, Call, Storage, Event<T>} = 41,
+		Identity: pallet_identity::{Pallet, Call, Storage, Event<T>} = 42,
 	}
 );
 
