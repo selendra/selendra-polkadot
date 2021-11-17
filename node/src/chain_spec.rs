@@ -238,6 +238,7 @@ fn selendra_genesis(
 				.to_vec(),
 			changes_trie_config: Default::default(),
 		},
+		sudo: selendra_runtime::SudoConfig { key: endowed_accounts[0].clone() },
 		balances: selendra_runtime::BalancesConfig {
 			balances: endowed_accounts.iter().cloned().map(|k| (k, ENDOWMENT)).collect(),
 		},
@@ -258,6 +259,16 @@ fn selendra_genesis(
 					)
 				})
 				.collect(),
+		},
+		democracy: selendra_runtime::DemocracyConfig::default(),
+		scheduler: selendra_runtime::SchedulerConfig {},
+		council_collective: selendra_runtime::CouncilCollectiveConfig {
+			phantom: Default::default(),
+			members: endowed_accounts.clone(),
+		},
+		tech_committee_collective: selendra_runtime::TechCommitteeCollectiveConfig {
+			phantom: Default::default(),
+			members: endowed_accounts.clone(),
 		},
 		// no need to pass anything to aura, in fact it will panic if we do. Session will take care
 		// of this.
