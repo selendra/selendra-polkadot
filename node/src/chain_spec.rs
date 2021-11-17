@@ -93,7 +93,7 @@ pub fn development_config() -> ChainSpec {
 					get_account_id_from_seed::<sr25519::Public>("Alice//stash"),
 					get_account_id_from_seed::<sr25519::Public>("Bob//stash"),
 				],
-				1000.into(),
+				2000.into(),
 			)
 		},
 		Vec::new(),
@@ -157,7 +157,7 @@ pub fn local_testnet_config() -> ChainSpec {
 		// Extensions
 		Extensions {
 			relay_chain: "westend-local".into(), // You MUST set this to the correct network!
-			para_id: 1000,
+			para_id: 2000,
 		},
 	)
 }
