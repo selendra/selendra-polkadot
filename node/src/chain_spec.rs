@@ -9,6 +9,7 @@ use selendra_runtime::{
 use serde::{Deserialize, Serialize};
 use sp_core::{crypto::UncheckedInto, sr25519, Pair, Public};
 use sp_runtime::traits::{IdentifyAccount, Verify};
+use std::collections::BTreeMap;
 
 /// Specialized `ChainSpec` for the normal parachain runtime.
 pub type ChainSpec = sc_service::GenericChainSpec<selendra_runtime::GenesisConfig, Extensions>;
@@ -274,5 +275,7 @@ fn selendra_genesis(
 		aura: Default::default(),
 		aura_ext: Default::default(),
 		parachain_system: Default::default(),
+		evm: selendra_runtime::EvmConfig { accounts: BTreeMap::new() },
+		ethereum: selendra_runtime::EthereumConfig {},
 	}
 }

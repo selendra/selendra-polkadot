@@ -8,6 +8,7 @@ mod service;
 mod cli;
 mod command;
 mod rpc;
+mod shell_upgrade;
 
 fn main() -> sc_cli::Result<()> {
 	command::run()

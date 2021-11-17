@@ -1,7 +1,7 @@
 use crate::{
 	chain_spec,
 	cli::{Cli, RelayChainCli, Subcommand},
-	service::{new_partial, TemplateRuntimeExecutor},
+	service::{new_partial, SelendraRuntimeExecutor},
 };
 use codec::Encode;
 use cumulus_client_service::genesis::generate_genesis_block;
@@ -119,11 +119,11 @@ macro_rules! construct_async_run {
 		runner.async_run(|$config| {
 			let $components = new_partial::<
 				RuntimeApi,
-				TemplateRuntimeExecutor,
+				SelendraRuntimeExecutor,
 				_
 			>(
 				&$config,
-				crate::service::parachain_build_import_queue,
+				crate::service::build_import_queue,
 			)?;
 			let task_manager = $components.task_manager;
 			{ $( $code )* }.map(|v| (v, task_manager))
@@ -231,7 +231,7 @@ pub fn run() -> Result<()> {
 			if cfg!(feature = "runtime-benchmarks") {
 				let runner = cli.create_runner(cmd)?;
 
-				runner.sync_run(|config| cmd.run::<Block, TemplateRuntimeExecutor>(config))
+				runner.sync_run(|config| cmd.run::<Block, SelendraRuntimeExecutor>(config))
 			} else {
 				Err("Benchmarking wasn't enabled when building the node. \
 				You can enable it with `--features runtime-benchmarks`."

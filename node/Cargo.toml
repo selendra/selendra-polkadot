@@ -22,11 +22,14 @@ runtime-benchmarks = ["selendra-runtime/runtime-benchmarks"]
 [dependencies]
 derive_more = "0.99.2"
 log = "0.4.14"
+futures = { version = "0.3.1", features = ["compat"] }
 codec = { package = "parity-scale-codec", version = "2.3.1" }
 structopt = "0.3.8"
 serde = { version = "1.0.119", features = ["derive"] }
+async-trait = "0.1.42"
 hex-literal = "0.3.4"
 jsonrpc-core = "18.0.0"
+jsonrpc-pubsub = "18.0.0"
 
 # Local Dependencies
 selendra-runtime = { path = "../runtime" }
@@ -80,6 +83,7 @@ cumulus-client-network = { git = 'https://github.com/paritytech/cumulus', branch
 cumulus-client-service = { git = 'https://github.com/paritytech/cumulus', branch = 'polkadot-v0.9.12' }
 cumulus-primitives-core = { git = 'https://github.com/paritytech/cumulus', branch = 'polkadot-v0.9.12' }
 cumulus-primitives-parachain-inherent = { git = 'https://github.com/paritytech/cumulus', branch = 'polkadot-v0.9.12' }
+cumulus-client-consensus-relay-chain = { git = 'https://github.com/paritytech/cumulus', branch = 'polkadot-v0.9.12' }
 
 # Polkadot dependencies
 polkadot-cli = { git = "https://github.com/paritytech/polkadot", branch = "release-v0.9.12" }
@@ -87,3 +91,13 @@ polkadot-parachain = { git = "https://github.com/paritytech/polkadot", branch = 
 polkadot-primitives = { git = "https://github.com/paritytech/polkadot", branch = "release-v0.9.12" }
 polkadot-service = { git = "https://github.com/paritytech/polkadot", branch = "release-v0.9.12" }
 polkadot-test-service = { git = "https://github.com/paritytech/polkadot", branch = "release-v0.9.12" }
+
+# Evm
+pallet-evm = { path = "../vendors/frontier/frame/evm"}
+pallet-ethereum = { path = "../vendors/frontier/frame/ethereum"}
+fp-rpc = { path = "../vendors/frontier/primitives/rpc"}
+fc-db = { path = "../vendors/frontier/client/db"}
+fc-rpc = { path = "../vendors/frontier/client/rpc"}
+fc-consensus = { path = "../vendors/frontier/client/consensus"}
+fc-rpc-core = { path = "../vendors/frontier/client/rpc-core"}
+fc-mapping-sync = { path = "../vendors/frontier/client/mapping-sync"}

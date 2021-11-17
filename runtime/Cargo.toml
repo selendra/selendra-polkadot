@@ -80,6 +80,19 @@ xcm-executor = { git = "https://github.com/paritytech/polkadot", default-feature
 # Local Dependency
 selendra-primitives = { path = "../primitive", default-features = false }
 
+# Evm relate
+evm = { version = "0.33.0", default-features = false, features = ["with-codec"] }
+pallet-ethereum  = { path = "../vendors/frontier/frame/ethereum", default-features = false }
+pallet-evm = { path = "../vendors/frontier/frame/evm", default-features = false }
+pallet-evm-precompile-bn128 = { path = "../vendors/frontier/frame/evm/precompile/bn128", default-features = false }
+pallet-evm-precompile-dispatch = { path = "../vendors/frontier/frame/evm/precompile/dispatch", default-features = false }
+pallet-evm-precompile-modexp = { path = "../vendors/frontier/frame/evm/precompile/modexp", default-features = false }
+pallet-evm-precompile-simple = { path = "../vendors/frontier/frame/evm/precompile/simple", default-features = false }
+pallet-evm-precompile-sha3fips = { path = "../vendors/frontier/frame/evm/precompile/sha3fips", default-features = false }
+pallet-evm-precompile-blake2 = { path = "../vendors/frontier/frame/evm/precompile/blake2", default-features = false }
+fp-rpc = { path = "../vendors/frontier/primitives/rpc", default-features = false }
+fp-self-contained = { path = "../vendors/frontier/primitives/self-contained", default-features = false }
+
 [features]
 default = [
 	"std",
@@ -134,7 +147,18 @@ std = [
 	"xcm-builder/std",
 	"xcm-executor/std",
 	"xcm/std",
-	"selendra-primitives/std"
+	"selendra-primitives/std",
+	"evm/std",
+	"pallet-ethereum/std",
+	"pallet-evm/std",
+	"pallet-evm-precompile-bn128/std",
+	"pallet-evm-precompile-dispatch/std",
+	"pallet-evm-precompile-modexp/std",
+	"pallet-evm-precompile-simple/std",
+	"pallet-evm-precompile-sha3fips/std",
+	"pallet-evm-precompile-blake2/std",
+	"fp-rpc/std",
+	"fp-self-contained/std",
 ]
 
 runtime-benchmarks = [
