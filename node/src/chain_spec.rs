@@ -270,8 +270,7 @@ fn selendra_genesis(
 			phantom: Default::default(),
 			members: endowed_accounts.clone(),
 		},
-		// no need to pass anything to aura, in fact it will panic if we do. Session will take care
-		// of this.
+		treasury: Default::default(),
 		aura: Default::default(),
 		aura_ext: Default::default(),
 		parachain_system: Default::default(),

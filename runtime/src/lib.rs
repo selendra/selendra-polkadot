@@ -348,6 +348,46 @@ impl pallet_collective::Config<TechCommitteeInstance> for Runtime {
 }
 
 parameter_types! {
+	pub const ProposalBond: Permill = Permill::from_percent(5);
+	pub const ProposalBondMinimum: Balance = 1 * UNIT;
+	pub const SpendPeriod: BlockNumber = 6 * DAYS;
+	pub const TreasuryId: PalletId = PalletId(*b"py/trsry");
+	pub const MaxApprovals: u32 = 100;
+}
+
+type TreasuryApproveOrigin = EnsureOneOf<
+	AccountId,
+	EnsureRoot<AccountId>,
+	pallet_collective::EnsureProportionAtLeast<_3, _5, AccountId, CouncilInstance>,
+>;
+
+type TreasuryRejectOrigin = EnsureOneOf<
+	AccountId,
+	EnsureRoot<AccountId>,
+	pallet_collective::EnsureProportionMoreThan<_1, _2, AccountId, CouncilInstance>,
+>;
+
+impl pallet_treasury::Config for Runtime {
+	type PalletId = TreasuryId;
+	type Currency = Balances;
+	// At least three-fifths majority of the council is required (or root) to approve a proposal
+	type ApproveOrigin = TreasuryApproveOrigin;
+	// More than half of the council is required (or root) to reject a proposal
+	type RejectOrigin = TreasuryRejectOrigin;
+	type Event = Event;
+	// If spending proposal rejected, transfer proposer bond to treasury
+	type OnSlash = Treasury;
+	type ProposalBond = ProposalBond;
+	type ProposalBondMinimum = ProposalBondMinimum;
+	type SpendPeriod = SpendPeriod;
+	type Burn = ();
+	type BurnDestination = ();
+	type MaxApprovals = MaxApprovals;
+	type WeightInfo = ();
+	type SpendFunds = ();
+}
+
+parameter_types! {
 	pub const ReservedXcmpWeight: Weight = MAXIMUM_BLOCK_WEIGHT / 4;
 	pub const ReservedDmpWeight: Weight = MAXIMUM_BLOCK_WEIGHT / 4;
 }
@@ -605,6 +645,9 @@ construct_runtime!(
 		Utility: pallet_utility::{Pallet, Call, Event} = 40,
 		Multisig: pallet_multisig::{Pallet, Call, Storage, Event<T>} = 41,
 		Identity: pallet_identity::{Pallet, Call, Storage, Event<T>} = 42,
+
+		// Treasury stuff.
+		Treasury: pallet_treasury::{Pallet, Storage, Config, Event<T>, Call} = 50,
 
 		// Governance & Council stuff.
 		Scheduler: pallet_scheduler::{Pallet, Storage, Config, Event<T>, Call} = 60,
