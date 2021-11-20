@@ -84,6 +84,7 @@ selendra-primitives = { path = "../primitive", default-features = false }
 evm = { version = "0.33.0", default-features = false, features = ["with-codec"] }
 pallet-ethereum  = { path = "../vendors/frontier/frame/ethereum", default-features = false }
 pallet-evm = { path = "../vendors/frontier/frame/evm", default-features = false }
+pallet-evm-accounts = { path = "../vendors/frontier/frame/evm/accounts", default-features = false }
 pallet-evm-precompile-bn128 = { path = "../vendors/frontier/frame/evm/precompile/bn128", default-features = false }
 pallet-evm-precompile-dispatch = { path = "../vendors/frontier/frame/evm/precompile/dispatch", default-features = false }
 pallet-evm-precompile-modexp = { path = "../vendors/frontier/frame/evm/precompile/modexp", default-features = false }
@@ -151,6 +152,7 @@ std = [
 	"evm/std",
 	"pallet-ethereum/std",
 	"pallet-evm/std",
+	"pallet-evm-accounts/std",
 	"pallet-evm-precompile-bn128/std",
 	"pallet-evm-precompile-dispatch/std",
 	"pallet-evm-precompile-modexp/std",

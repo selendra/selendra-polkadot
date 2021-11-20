@@ -1,20 +1,20 @@
 //! Service and ServiceFactory implementation. Specialized wrapper over substrate service.
 
-use std::{collections::BTreeMap, sync::Arc, time::Duration};
 use futures::{lock::Mutex, StreamExt};
+use std::{collections::BTreeMap, sync::Arc, time::Duration};
 
+use crate::shell_upgrade::{BuildOnAccess, Verifier, WaitForAuraConsensus};
 use selendra_primitives::{AccountId, Balance, Block, Hash, Index as Nonce};
 use selendra_runtime::RuntimeApi;
-use crate::shell_upgrade::{BuildOnAccess, Verifier, WaitForAuraConsensus};
 
 use cumulus_client_consensus_aura::{
-    build_aura_consensus, BuildAuraConsensusParams, SlotProportion,
+	build_aura_consensus, BuildAuraConsensusParams, SlotProportion,
 };
 use cumulus_client_consensus_common::{ParachainBlockImport, ParachainConsensus};
 use cumulus_client_consensus_relay_chain::Verifier as RelayChainVerifier;
 use cumulus_client_network::build_block_announce_validator;
 use cumulus_client_service::{
-    prepare_node_config, start_collator, start_full_node, StartCollatorParams, StartFullNodeParams,
+	prepare_node_config, start_collator, start_full_node, StartCollatorParams, StartFullNodeParams,
 };
 use cumulus_primitives_core::ParaId;
 use fc_consensus::FrontierBlockImport;
@@ -313,7 +313,11 @@ where
 
 	task_manager.spawn_essential_handle().spawn(
 		"frontier-schema-cache-task",
-		fc_rpc::EthTask::ethereum_schema_cache_task(client.clone(), frontier_backend.clone(), pallet_ethereum::EthereumStorageSchema::V2),
+		fc_rpc::EthTask::ethereum_schema_cache_task(
+			client.clone(),
+			frontier_backend.clone(),
+			pallet_ethereum::EthereumStorageSchema::V2,
+		),
 	);
 
 	let rpc_extensions_builder = {

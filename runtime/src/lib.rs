@@ -60,7 +60,10 @@ use selendra_primitives::{Balance, BlockNumber, Hash, Index, Moment};
 use pallet_evm::{FeeCalculator, Runner};
 
 pub mod constants;
-use constants::{common::*, currency::*, precompiles::SelendraPrecompiles, time::*};
+use constants::{
+	common::*, currency::*, merge_account::MergeAccountEvm, precompiles::SelendraPrecompiles,
+	time::*,
+};
 
 impl_opaque_keys! {
 	pub struct SessionKeys {
@@ -107,7 +110,8 @@ impl frame_system::Config for Runtime {
 	type PalletInfo = PalletInfo;
 	type AccountData = pallet_balances::AccountData<Balance>;
 	type OnNewAccount = ();
-	type OnKilledAccount = ();
+	type OnKilledAccount =
+		(pallet_evm::CallKillAccount<Runtime>, pallet_evm_accounts::CallKillAccount<Runtime>);
 	type DbWeight = RocksDbWeight;
 	type BaseCallFilter = Everything;
 	type SystemWeightInfo = ();
@@ -662,9 +666,9 @@ impl pallet_evm::Config for Runtime {
 	type FeeCalculator = FixedGasPrice;
 	type GasWeightMapping = SelendraGasWeightMapping;
 	type BlockHashMapping = pallet_ethereum::EthereumBlockHashMapping<Runtime>;
-	type CallOrigin = pallet_evm::EnsureAddressRoot<AccountId>;
+	type CallOrigin = pallet_evm::EnsureAddressTruncated;
 	type WithdrawOrigin = pallet_evm::EnsureAddressTruncated;
-	type AddressMapping = pallet_evm::HashedAddressMapping<BlakeTwo256>;
+	type AddressMapping = pallet_evm_accounts::EvmAddressMapping<Runtime>;
 	type Currency = Balances;
 	type Event = Event;
 	type Runner = pallet_evm::runner::stack::Runner<Self>;
@@ -679,6 +683,15 @@ impl pallet_evm::Config for Runtime {
 impl pallet_ethereum::Config for Runtime {
 	type Event = Event;
 	type StateRoot = pallet_ethereum::IntermediateStateRoot;
+}
+
+impl pallet_evm_accounts::Config for Runtime {
+	type Event = Event;
+	type Currency = Balances;
+	type KillAccount = frame_system::Consumer<Runtime>;
+	type AddressMapping = pallet_evm_accounts::EvmAddressMapping<Runtime>;
+	type MergeAccount = MergeAccountEvm;
+	type WeightInfo = ();
 }
 
 pub struct TransactionConverter;
@@ -726,7 +739,8 @@ construct_runtime!(
 
 		// Evm
 		Evm: pallet_evm::{Pallet, Config, Call, Storage, Event<T>} = 16,
-		Ethereum: pallet_ethereum::{Pallet, Call, Storage, Event, Origin, Config}= 17,
+		EvmAccounts: pallet_evm_accounts::{Pallet, Call, Storage, Event<T>} = 17,
+		Ethereum: pallet_ethereum::{Pallet, Call, Storage, Event, Origin, Config}= 18,
 
 		// Collator support
 		Authorship: pallet_authorship::{Pallet, Call, Storage} = 20,

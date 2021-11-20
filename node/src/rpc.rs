@@ -161,23 +161,18 @@ where
 }
 
 pub fn open_frontier_backend(
-    config: &sc_service::Configuration,
+	config: &sc_service::Configuration,
 ) -> Result<Arc<fc_db::Backend<Block>>, String> {
-    let config_dir = config
-        .base_path
-        .as_ref()
-        .map(|base_path| base_path.config_dir(config.chain_spec.id()))
-        .unwrap_or_else(|| {
-            sc_service::BasePath::from_project("", "", "astar").config_dir(config.chain_spec.id())
-        });
-    let path = config_dir.join("frontier").join("db");
+	let config_dir = config
+		.base_path
+		.as_ref()
+		.map(|base_path| base_path.config_dir(config.chain_spec.id()))
+		.unwrap_or_else(|| {
+			sc_service::BasePath::from_project("", "", "astar").config_dir(config.chain_spec.id())
+		});
+	let path = config_dir.join("frontier").join("db");
 
-    Ok(Arc::new(fc_db::Backend::<Block>::new(
-        &fc_db::DatabaseSettings {
-            source: fc_db::DatabaseSettingsSrc::RocksDb {
-                path,
-                cache_size: 0,
-            },
-        },
-    )?))
+	Ok(Arc::new(fc_db::Backend::<Block>::new(&fc_db::DatabaseSettings {
+		source: fc_db::DatabaseSettingsSrc::RocksDb { path, cache_size: 0 },
+	})?))
 }

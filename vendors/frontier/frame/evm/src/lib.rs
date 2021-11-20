@@ -76,7 +76,7 @@ use frame_support::{
 	dispatch::DispatchResultWithPostInfo,
 	traits::{
 		tokens::fungible::Inspect, Currency, ExistenceRequirement, FindAuthor, Get, Imbalance,
-		OnUnbalanced, SignedImbalance, WithdrawReasons,
+		OnKilledAccount, OnUnbalanced, SignedImbalance, WithdrawReasons,
 	},
 	weights::{Pays, PostDispatchInfo, Weight},
 };
@@ -502,6 +502,7 @@ where
 
 pub trait AddressMapping<A> {
 	fn into_account_id(address: H160) -> A;
+	fn to_evm_address(account: &A) -> Option<H160>;
 }
 
 /// Identity address mapping.
@@ -510,6 +511,10 @@ pub struct IdentityAddressMapping;
 impl AddressMapping<H160> for IdentityAddressMapping {
 	fn into_account_id(address: H160) -> H160 {
 		address
+	}
+
+	fn to_evm_address(account: &H160) -> Option<H160> {
+		Some(account.clone())
 	}
 }
 
@@ -524,6 +529,11 @@ impl<H: Hasher<Out = H256>> AddressMapping<AccountId32> for HashedAddressMapping
 		let hash = H::hash(&data);
 
 		AccountId32::from(Into::<[u8; 32]>::into(hash))
+	}
+
+	fn to_evm_address(_account: &AccountId32) -> Option<H160> {
+		// we're not able to recover the evm address from a hashed address
+		None
 	}
 }
 
@@ -771,5 +781,14 @@ impl<T> OnChargeEVMTransaction<T> for ()
 
 	fn pay_priority_fee(tip: U256) {
 		<EVMCurrencyAdapter::<<T as Config>::Currency, ()> as OnChargeEVMTransaction<T>>::pay_priority_fee(tip);
+	}
+}
+
+pub struct CallKillAccount<T>(sp_std::marker::PhantomData<T>);
+impl<T: Config> OnKilledAccount<T::AccountId> for CallKillAccount<T> {
+	fn on_killed_account(who: &T::AccountId) {
+		if let Some(address) = T::AddressMapping::to_evm_address(who) {
+			Pallet::<T>::remove_account(&address)
+		}
 	}
 }

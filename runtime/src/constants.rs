@@ -196,3 +196,33 @@ pub mod precompiles {
 		H160::from_low_u64_be(a)
 	}
 }
+
+pub mod merge_account {
+	use crate::Balances;
+	use frame_support::{traits::ReservableCurrency, transactional};
+	use pallet_evm_accounts::account::MergeAccount;
+	use selendra_primitives::AccountId;
+	use sp_runtime::DispatchResult;
+
+	pub struct MergeAccountEvm;
+	impl MergeAccount<AccountId> for MergeAccountEvm {
+		#[transactional]
+		fn merge_account(source: &AccountId, dest: &AccountId) -> DispatchResult {
+			// unreserve all reserved currency
+			<Balances as ReservableCurrency<_>>::unreserve(
+				source,
+				Balances::reserved_balance(source),
+			);
+
+			// transfer all free to dest
+			match Balances::transfer(
+				Some(source.clone()).into(),
+				dest.clone().into(),
+				Balances::free_balance(source),
+			) {
+				Ok(_) => Ok(()),
+				Err(e) => Err(e.error),
+			}
+		}
+	}
+}
